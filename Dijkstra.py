@@ -1,13 +1,14 @@
 from collections import defaultdict
 
 # Graph class to represent a directed graph
+# Referenced module 17 slide 16
 class Graph:
     def __init__(self):
         # Set of all nodes in the graph
         self.nodes = set()
-        # Adjacency list for edges
+        # Adjacency list for edges, where each node has a list of outgoing edges
         self.edges = defaultdict(list)
-        # Dictionary to store distances between nodes
+        # Dictionary to store distances between nodes, used for edge weights
         self.distances = {}
 
     # Add a node to the graph
@@ -31,6 +32,7 @@ def dijkstra(graph, start):
 
     print("Starting Dijkstra's algorithm...\n--------------------------------\n")
     
+    # Loop until all nodes have been visited or there are no nodes to visit
     while nodes:
         # Find the node with the smallest distance from the visited nodes
         min_node = None
@@ -39,7 +41,7 @@ def dijkstra(graph, start):
                 if min_node is None or visited[node] < visited[min_node]:
                     min_node = node
 
-        # If no node can be selected, exit the loop
+        # If no node can be selected, exit the loop (this means there are no connected nodes left)
         if min_node is None:
             break
 
@@ -56,8 +58,8 @@ def dijkstra(graph, start):
             # Relaxation step: Update distance if a shorter path is found
             if neighbor not in visited or weight < visited[neighbor]:
                 print(f"Relaxed: vertex[{neighbor}]: OLD: {visited.get(neighbor, 'Infinity')}, NEW: {weight}, PATHS: {path}")
-                visited[neighbor] = weight
-                path[neighbor] = min_node
+                visited[neighbor] = weight  # Update shortest distance for the neighbor
+                path[neighbor] = min_node   # Update the predecessor of the neighbor (i.e., the current node)
             else:
                 print(f"No edge relaxation is needed for node [{neighbor}]\n")
 
@@ -68,6 +70,7 @@ def dijkstra(graph, start):
 def main():
     # Constructing the Graph
     ConstructGraph = Graph()
+    # List of nodes to add to the graph
     nodes = ['s', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 't']
     for node in nodes:
         ConstructGraph.add_node(node)
@@ -90,19 +93,22 @@ def main():
     # Displaying Final Results
     print("\nFinal Shortest Path Results: \n----------------------------")
     
+    # Display the shortest distance to each visited node
     print("Visited (Shortest Distances):")
     for node, distance in visited.items():
         print(f"  {node}: {distance}")
 
+    # Display the predecessor of each node, showing the path from the start node
     print("\nPath (Predecessors):")
     for node, predecessor in path.items():
         print(f"  {node}: {predecessor}")
     
+    # Calculate the total weight of all the shortest paths
     total_weight = 0
     for node, distance in visited.items():
         total_weight += distance
     print(f"Total Weight: {total_weight}")    
 
-
+# Entry point of the script
 if __name__ == "__main__":
     main()

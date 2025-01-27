@@ -6,11 +6,13 @@ from collections import defaultdict
 #  Graph class
 #
 # #########################
+# This class represents a graph using an adjacency list.
+# Referenced https://replit.com/join/hcoosdgikc-sungheenam
 class Graph:
     def __init__(self):
         self.nodes = set()  # A set to store all nodes (cities) in the graph
-        self.edges = defaultdict(list)  # Adjacency list to store edges
-        self.distances = {}  # Dictionary to store distances between nodes
+        self.edges = defaultdict(list)  # Adjacency list to store edges (roads)
+        self.distances = {}  # Dictionary to store distances between nodes (cities)
 
     def add_node(self, value):
         """Add a node (city) to the graph."""
@@ -33,7 +35,7 @@ class Graph:
 
 # #########################
 #
-#  Dijkstra's SSSP
+#  Dijkstra's SSSP (Single Source Shortest Path)
 #
 # #########################
 def dijkstra_city_distance(graph, s):
@@ -84,26 +86,24 @@ def dijkstra_city_distance(graph, s):
 
 # #########################
 #
-#  MST
+#  Minimum Spanning Tree (MST) - Prim's Algorithm
 #
 # #########################
 def printMST(parent, g):
-    #print the header for table
-    print ("\n\tEdge\t\tWeight\n----------------------------------")
+    """Print the edges of the Minimum Spanning Tree (MST) with their weights."""
+    print ("---------------------------------------------------------------")
+    print ("\tEdge\t\tWeight")
+    print ("---------------------------------------------------------------")
     total = 0  # Total weight of the MST
-    #iterate through parent 
+    # Iterate through the parent nodes to print the MST edges
     for i in parent.keys():
-        #if i = root
+        # If i is the root node, print it with distance 0
         if (parent[i] == "") :
-            #print 0 as the node and the distance
             print(f"{i:>15} {i:>15} {g.distances[(i, parent[i])]:.>20d}")
-            
         elif(parent[i] != ""):
             total += g.distances[(i, parent[i])]
             print(f"{i:>15} {i:>15} {g.distances[(i, parent[i])]:.>20d}")
-            
         else:
-            #print the parent node, current node, and the distance
             print(f"{parent[i]:>15} {i:>15} {g.distances[(i, parent[i])]:.>20d}")
     print("\nTotal MST: ", "\t", total)
 
@@ -147,8 +147,9 @@ def primMST(graph, s):
 
 def main():
     """Main function to set up the graph and run Dijkstra's and Prim's algorithms."""
-    g = Graph()
-    #set up nodes
+    g = Graph()  # Create a new graph object
+
+    # Set up nodes (cities)
     g.add_node('Atlanta')
     g.add_node('Boston')
     g.add_node('Chicago')
@@ -165,10 +166,10 @@ def main():
     g.add_node('Seattle')
     g.add_node('Washington')
 
-    #set up edges for Prim's algrithm
+    # Initialize distances for Prim's algorithm
     g.initializeDistances()
 
-    #set up distances (edges)
+    # Set up distances (edges) between cities (roads and their distances)
     g.add_edge('Seattle', 'SF', 1092)
     g.add_edge('SF','Seattle',  1092)
     g.add_edge('Seattle', 'LA', 1544)
@@ -230,9 +231,16 @@ def main():
     g.add_edge('Washington', 'Denver', 2395)
     g.add_edge('Denver', 'Washington', 2395)
 
-    print("\nDijkstra's Algorithm Results: \n-----------------------------------------------------")
+    # Run Dijkstra's algorithm
+    print ("---------------------------------------------------------------")
+    print("Dijkstra's Algorithm Results: ")
+    print ("---------------------------------------------------------------")
     dijkstra_city_distance(g, 'Denver')
-    print("\n\nPrim's Algorithm Results: \n-----------------------------------------------------")
+
+    # Run Prim's algorithm to find the MST
+    print ("---------------------------------------------------------------")
+    print("Prim's Algorithm Results: ")
+    print ("---------------------------------------------------------------")
     primMST(g, 'Denver')
 
 if __name__ == "__main__":
